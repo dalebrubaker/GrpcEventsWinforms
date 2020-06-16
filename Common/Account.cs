@@ -11,7 +11,7 @@ namespace Common
             Name = name;
         }
 
-        public event EventHandler<SampleEventArgs> OrderUpdate;
+        public event EventHandler<SampleEventArgs> SampleEvent;
 
         public void OnSampleEvent(string accountName, string sender)
         {
@@ -25,7 +25,7 @@ namespace Common
 
         public void OnSampleEvent(SampleEventArgs args)
         {
-            var tmp = OrderUpdate;
+            var tmp = SampleEvent;
             tmp?.Invoke(this, args);
         }
     }
