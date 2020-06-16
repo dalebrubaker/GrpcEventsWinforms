@@ -39,9 +39,7 @@
             // 
             // logControl1
             // 
-            this.logControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.logControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.logControl1.HideTimestamps = false;
             this.logControl1.Location = new System.Drawing.Point(-1, 49);
             this.logControl1.MaximumLogLengthChars = 1048576;
@@ -58,6 +56,7 @@
             this.btnSubscribeEvent.TabIndex = 7;
             this.btnSubscribeEvent.Text = "Subscribe Event";
             this.btnSubscribeEvent.UseVisualStyleBackColor = true;
+            this.btnSubscribeEvent.Click += new System.EventHandler(this.btnSubscribeEvent_Click);
             // 
             // btnStopClient
             // 
@@ -67,6 +66,7 @@
             this.btnStopClient.TabIndex = 6;
             this.btnStopClient.Text = "Stop Client";
             this.btnStopClient.UseVisualStyleBackColor = true;
+            this.btnStopClient.Click += new System.EventHandler(this.btnStopClient_Click);
             // 
             // btnStartClient
             // 
@@ -76,6 +76,7 @@
             this.btnStartClient.TabIndex = 5;
             this.btnStartClient.Text = "Start Client";
             this.btnStartClient.UseVisualStyleBackColor = true;
+            this.btnStartClient.Click += new System.EventHandler(this.btnStartClient_Click);
             // 
             // btnUnsubscribeEvent
             // 
@@ -85,6 +86,7 @@
             this.btnUnsubscribeEvent.TabIndex = 8;
             this.btnUnsubscribeEvent.Text = "Unsubscribe Event";
             this.btnUnsubscribeEvent.UseVisualStyleBackColor = true;
+            this.btnUnsubscribeEvent.Click += new System.EventHandler(this.btnUnsubscribeEvent_Click);
             // 
             // label1
             // 
@@ -116,19 +118,19 @@
             this.Controls.Add(this.logControl1);
             this.Name = "FormClient";
             this.Text = "Client";
+            this.Load += new System.EventHandler(this.FormClient_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
-        #endregion
-
-        private Common.LogControl logControl1;
-        private System.Windows.Forms.Button btnSubscribeEvent;
-        private System.Windows.Forms.Button btnStopClient;
         private System.Windows.Forms.Button btnStartClient;
+        private System.Windows.Forms.Button btnStopClient;
+        private System.Windows.Forms.Button btnSubscribeEvent;
         private System.Windows.Forms.Button btnUnsubscribeEvent;
         private System.Windows.Forms.Label label1;
+        private Common.LogControl logControl1;
         private System.Windows.Forms.TextBox txtAccountName;
+
+        #endregion
     }
 }

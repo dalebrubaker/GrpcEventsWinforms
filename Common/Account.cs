@@ -1,6 +1,6 @@
 using System;
 
-namespace Server
+namespace Common
 {
     public class Account
     {
@@ -13,13 +13,18 @@ namespace Server
 
         public event EventHandler<SampleEventArgs> OrderUpdate;
 
-        public void OnSampleEvent(string accountName, string source)
+        public void OnSampleEvent(string accountName, string sender)
         {
             var args = new SampleEventArgs
             {
                 AccountName = accountName,
-                Source = source
+                Sender = sender
             };
+            OnSampleEvent(args);
+        }
+
+        public void OnSampleEvent(SampleEventArgs args)
+        {
             var tmp = OrderUpdate;
             tmp?.Invoke(this, args);
         }

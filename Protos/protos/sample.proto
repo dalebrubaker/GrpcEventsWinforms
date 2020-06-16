@@ -3,11 +3,12 @@
 package GrpcEvents;
 
 service EventsService {
-    rpc Subscribe (stream AccountNameMessage) returns (stream SampleEventArgsMessage) {}
+    rpc Subscribe (stream SubscribeRequest) returns (stream SampleEventArgsMessage) {}
 }
 
-message AccountNameMessage {
-    string account_name = 1;
+message SubscribeRequest {
+    bool start_stop = 1; // true for subscribe, false for unsubscribe
+    string account_name = 2;
 }
 
 message SampleEventArgsMessage {

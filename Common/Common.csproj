@@ -43,14 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="LogControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="LogControl.Designer.cs">
       <DependentUpon>LogControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="MessageExtensions.cs" />
     <Compile Include="NativeConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleEventArgs.cs" />
     <Compile Include="SynchronizationContextHelper.cs" />
     <Compile Include="ToolStripEx.cs">
       <SubType>Component</SubType>
@@ -62,9 +66,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NLog">
-      <Version>4.7.2</Version>
-    </PackageReference>
+    <ProjectReference Include="..\Protos\Protos.csproj">
+      <Project>{0a9d2788-6deb-44ab-95d0-219a90437c60}</Project>
+      <Name>Protos</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
