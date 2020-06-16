@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{92692945-32B7-438F-9B55-A026A241EB54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{0A9D2788-6DEB-44AB-95D0-219A90437C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A9D2788-6DEB-44AB-95D0-219A90437C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A9D2788-6DEB-44AB-95D0-219A90437C60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92692945-32B7-438F-9B55-A026A241EB54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92692945-32B7-438F-9B55-A026A241EB54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92692945-32B7-438F-9B55-A026A241EB54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92692945-32B7-438F-9B55-A026A241EB54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

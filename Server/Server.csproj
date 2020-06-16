@@ -87,5 +87,15 @@
       <Version>4.7.2</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{92692945-32b7-438f-9b55-a026a241eb54}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Protos\Protos.csproj">
+      <Project>{0a9d2788-6deb-44ab-95d0-219a90437c60}</Project>
+      <Name>Protos</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
