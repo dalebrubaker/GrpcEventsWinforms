@@ -7,14 +7,56 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Common;
+using Grpc.Core;
+using GrpcEvents;
 
 namespace Server
 {
     public partial class FormServer : Form
     {
+        private Grpc.Core.Server _server;
+
         public FormServer()
         {
             InitializeComponent();
+        }
+
+        private void btnStartServer_Click(object sender, EventArgs e)
+        {
+            var eventsServiceImpl = new EventsServiceImpl(logControl1);
+            _server = new Grpc.Core.Server
+            {
+                Services =
+                {
+                    EventsService.BindService(eventsServiceImpl)
+                },
+                Ports = {new ServerPort("localhost", Constants.ServerPort, ServerCredentials.Insecure)}
+            };
+            logControl1.LogMessage("Starting server");
+            _server.Start();
+            logControl1.LogMessage("Started server");
+
+            eventsServiceImpl.AccountNameAdded += EventsServiceImplOnAccountNameAdded;
+        }
+
+        private void  EventsServiceImplOnAccountNameAdded(object sender, string accountName)
+        {
+            cbxAcctNames.Items.Add(accountName);
+        }
+
+        private async void btnStopServer_Click(object sender, EventArgs e)
+        {
+            logControl1.LogMessage("Shutting down server");
+            await _server.ShutdownAsync();
+            logControl1.LogMessage("Shut down server");
+        }
+
+        private void btnSendEvent_Click(object sender, EventArgs e)
+        {
+            var accountName = (string)cbxAcctNames.SelectedItem;
+            var account = Accounts.RequireAccount(accountName);
+            account.OnSampleEvent(accountName, "Server");
         }
     }
 }

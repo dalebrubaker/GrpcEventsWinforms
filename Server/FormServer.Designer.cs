@@ -37,9 +37,7 @@
             // 
             // logControl1
             // 
-            this.logControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.logControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.logControl1.HideTimestamps = false;
             this.logControl1.Location = new System.Drawing.Point(2, 52);
             this.logControl1.MaximumLogLengthChars = 1048576;
@@ -56,6 +54,7 @@
             this.btnStartServer.TabIndex = 2;
             this.btnStartServer.Text = "Start Server";
             this.btnStartServer.UseVisualStyleBackColor = true;
+            this.btnStartServer.Click += new System.EventHandler(this.btnStartServer_Click);
             // 
             // btnStopServer
             // 
@@ -65,6 +64,7 @@
             this.btnStopServer.TabIndex = 3;
             this.btnStopServer.Text = "Stop Server";
             this.btnStopServer.UseVisualStyleBackColor = true;
+            this.btnStopServer.Click += new System.EventHandler(this.btnStopServer_Click);
             // 
             // btnSendEvent
             // 
@@ -74,6 +74,7 @@
             this.btnSendEvent.TabIndex = 4;
             this.btnSendEvent.Text = "Send Event";
             this.btnSendEvent.UseVisualStyleBackColor = true;
+            this.btnSendEvent.Click += new System.EventHandler(this.btnSendEvent_Click);
             // 
             // cbxAcctNames
             // 
@@ -96,16 +97,15 @@
             this.Name = "FormServer";
             this.Text = "Server";
             this.ResumeLayout(false);
-
         }
 
-        #endregion
-
-        private Common.LogControl logControl1;
+        private System.Windows.Forms.Button btnSendEvent;
         private System.Windows.Forms.Button btnStartServer;
         private System.Windows.Forms.Button btnStopServer;
-        private System.Windows.Forms.Button btnSendEvent;
         private System.Windows.Forms.ComboBox cbxAcctNames;
+        private Common.LogControl logControl1;
+
+        #endregion
     }
 }
 

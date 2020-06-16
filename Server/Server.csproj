@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountNamePeer.cs" />
     <Compile Include="Accounts.cs" />
     <Compile Include="AccountSampleEventWriter.cs" />
     <Compile Include="EventsServiceImpl.cs" />
