@@ -11,7 +11,6 @@ namespace Client
     {
         private readonly string _clientName;
         private readonly LogControl _logControl;
-        private readonly EventsService.EventsServiceClient _client;
         private AsyncDuplexStreamingCall<SubscribeRequest, SampleEventArgsMessage> _call;
 
         public string AccountName { get; }
@@ -21,8 +20,6 @@ namespace Client
             _clientName = clientName;
             _logControl = logControl;
             AccountName = accountName;
-            var channel = new Channel("localhost:" + Constants.ServerPort, ChannelCredentials.Insecure);
-            _client = new EventsService.EventsServiceClient(channel);
         }
 
         public async Task SubscribeAsync()
@@ -53,7 +50,9 @@ namespace Client
         {
             try
             {
-                using (_call = _client.Subscribe())
+                var channel = new Channel("localhost:" + Constants.ServerPort, ChannelCredentials.Insecure);
+                var client = new EventsService.EventsServiceClient(channel);
+                using (_call = client.Subscribe())
                 {
                     _logControl.LogMessage($"{_clientName} is waiting for events...");
                     while (await _call.ResponseStream.MoveNext(CancellationToken.None))
@@ -97,15 +96,15 @@ namespace Client
             }
         }
 
-        public override string ToString()
-        {
-            return AccountName;
-        }
-
         public void Dispose()
         {
             _call?.Dispose();
             _call = null;
+        }
+
+        public override string ToString()
+        {
+            return AccountName;
         }
     }
 }
