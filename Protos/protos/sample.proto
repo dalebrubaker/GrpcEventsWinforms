@@ -1,0 +1,12 @@
+﻿syntax = "proto3";
+
+package GrpcEvents;
+
+service EventsService {
+    rpc Subscribe (stream AccountNameMessage) returns (stream AccountNameMessage) {}
+}
+
+message AccountNameMessage {
+    string account_name = 1;
+}
+
