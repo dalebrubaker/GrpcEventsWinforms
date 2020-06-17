@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
-using NLog;
 
 namespace Common
 {
@@ -11,8 +10,6 @@ namespace Common
     /// </summary>
     public class SynchronizationContextHelper : IEquatable<SynchronizationContextHelper>
     {
-        private static readonly ILogger s_logger = LogManager.GetCurrentClassLogger();
-
         private readonly SynchronizationContext _syncContext;
 
         public SynchronizationContextHelper()
@@ -46,7 +43,6 @@ namespace Common
                 // System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. --->
                 // System.ComponentModel.InvalidAsynchronousStateException: An error occurred invoking the method.
                 // The destination thread no longer exists.
-                s_logger.Debug(" Ignoring InvalidAsynchronousStateException.");
             }
             catch (TargetInvocationException)
             {
@@ -54,11 +50,9 @@ namespace Common
                 // System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. --->
                 // System.ComponentModel.InvalidAsynchronousStateException: An error occurred invoking the method.
                 // The destination thread no longer exists.
-                s_logger.Debug(" Ignoring TargetInvocationException.");
             }
             catch (Exception ex)
             {
-                s_logger.Error(ex.Message);
                 throw;
             }
         }

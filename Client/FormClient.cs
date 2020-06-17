@@ -1,19 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Client
 {
     public partial class FormClient : Form
     {
-        private static int _sClientNumber;
+        private const string ClientGuid = "04C22ADA-6E1E-4821-B267-7FA3DCA31DBB";
         private int _clientNumber;
         private readonly List<Subscription> _subscriptions = new List<Subscription>();
+        private Semaphore _semaphore;
+        
 
         public FormClient()
         {
             InitializeComponent();
+            Disposed += OnDisposed;
+        }
+
+        private void  OnDisposed(object sender, EventArgs e)
+        {
+            _semaphore?.Dispose();
         }
 
         private void btnStartClient_Click(object sender, EventArgs e)
@@ -26,7 +35,11 @@ namespace Client
 
         private void FormClient_Load(object sender, EventArgs e)
         {
-            _clientNumber = _sClientNumber++;
+            if (!Semaphore.TryOpenExisting(ClientGuid, out _semaphore))
+            {
+                _semaphore = new Semaphore(0, 1000, ClientGuid);
+            }
+            _clientNumber = _semaphore.Release() + 1;
             Text = "Client-" + _clientNumber;
         }
 
@@ -64,6 +77,11 @@ namespace Client
             }
             _subscriptions.Remove(subscription);
             await subscription.UnsubscribeAsync();
+        }
+
+        private void btnCrash_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(1);
         }
     }
 }

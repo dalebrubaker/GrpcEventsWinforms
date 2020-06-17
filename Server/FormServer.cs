@@ -58,5 +58,10 @@ namespace Server
             var account = Accounts.RequireAccount(accountName);
             account.OnSampleEvent(accountName, "Server");
         }
+
+        private void btnCrash_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(1);
+        }
     }
 }

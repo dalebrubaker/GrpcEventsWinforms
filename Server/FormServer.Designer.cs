@@ -33,6 +33,7 @@
             this.btnStopServer = new System.Windows.Forms.Button();
             this.btnSendEvent = new System.Windows.Forms.Button();
             this.cbxAcctNames = new System.Windows.Forms.ComboBox();
+            this.btnCrash = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // logControl1
@@ -84,11 +85,22 @@
             this.cbxAcctNames.Size = new System.Drawing.Size(121, 21);
             this.cbxAcctNames.TabIndex = 5;
             // 
+            // btnCrash
+            // 
+            this.btnCrash.Location = new System.Drawing.Point(383, 11);
+            this.btnCrash.Name = "btnCrash";
+            this.btnCrash.Size = new System.Drawing.Size(75, 23);
+            this.btnCrash.TabIndex = 12;
+            this.btnCrash.Text = "Crash";
+            this.btnCrash.UseVisualStyleBackColor = true;
+            this.btnCrash.Click += new System.EventHandler(this.btnCrash_Click);
+            // 
             // FormServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(847, 523);
+            this.Controls.Add(this.btnCrash);
             this.Controls.Add(this.cbxAcctNames);
             this.Controls.Add(this.btnSendEvent);
             this.Controls.Add(this.btnStopServer);
@@ -99,6 +111,7 @@
             this.ResumeLayout(false);
         }
 
+        private System.Windows.Forms.Button btnCrash;
         private System.Windows.Forms.Button btnSendEvent;
         private System.Windows.Forms.Button btnStartServer;
         private System.Windows.Forms.Button btnStopServer;

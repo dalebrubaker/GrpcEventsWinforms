@@ -35,6 +35,7 @@
             this.btnUnsubscribeEvent = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtAccountName = new System.Windows.Forms.TextBox();
+            this.btnCrash = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // logControl1
@@ -104,11 +105,22 @@
             this.txtAccountName.Size = new System.Drawing.Size(100, 20);
             this.txtAccountName.TabIndex = 10;
             // 
+            // btnCrash
+            // 
+            this.btnCrash.Location = new System.Drawing.Point(586, 12);
+            this.btnCrash.Name = "btnCrash";
+            this.btnCrash.Size = new System.Drawing.Size(75, 23);
+            this.btnCrash.TabIndex = 11;
+            this.btnCrash.Text = "Crash";
+            this.btnCrash.UseVisualStyleBackColor = true;
+            this.btnCrash.Click += new System.EventHandler(this.btnCrash_Click);
+            // 
             // FormClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(845, 478);
+            this.Controls.Add(this.btnCrash);
             this.Controls.Add(this.txtAccountName);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnUnsubscribeEvent);
@@ -123,6 +135,7 @@
             this.PerformLayout();
         }
 
+        private System.Windows.Forms.Button btnCrash;
         private System.Windows.Forms.Button btnStartClient;
         private System.Windows.Forms.Button btnStopClient;
         private System.Windows.Forms.Button btnSubscribeEvent;
