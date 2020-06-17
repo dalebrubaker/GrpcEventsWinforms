@@ -30,8 +30,6 @@
         {
             this.logControl1 = new Common.LogControl();
             this.btnSubscribeEvent = new System.Windows.Forms.Button();
-            this.btnStopClient = new System.Windows.Forms.Button();
-            this.btnStartClient = new System.Windows.Forms.Button();
             this.btnUnsubscribeEvent = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtAccountName = new System.Windows.Forms.TextBox();
@@ -51,7 +49,7 @@
             // 
             // btnSubscribeEvent
             // 
-            this.btnSubscribeEvent.Location = new System.Drawing.Point(174, 12);
+            this.btnSubscribeEvent.Location = new System.Drawing.Point(170, 8);
             this.btnSubscribeEvent.Name = "btnSubscribeEvent";
             this.btnSubscribeEvent.Size = new System.Drawing.Size(99, 23);
             this.btnSubscribeEvent.TabIndex = 7;
@@ -59,29 +57,9 @@
             this.btnSubscribeEvent.UseVisualStyleBackColor = true;
             this.btnSubscribeEvent.Click += new System.EventHandler(this.btnSubscribeEvent_Click);
             // 
-            // btnStopClient
-            // 
-            this.btnStopClient.Location = new System.Drawing.Point(93, 12);
-            this.btnStopClient.Name = "btnStopClient";
-            this.btnStopClient.Size = new System.Drawing.Size(75, 23);
-            this.btnStopClient.TabIndex = 6;
-            this.btnStopClient.Text = "Stop Client";
-            this.btnStopClient.UseVisualStyleBackColor = true;
-            this.btnStopClient.Click += new System.EventHandler(this.btnStopClient_Click);
-            // 
-            // btnStartClient
-            // 
-            this.btnStartClient.Location = new System.Drawing.Point(12, 12);
-            this.btnStartClient.Name = "btnStartClient";
-            this.btnStartClient.Size = new System.Drawing.Size(75, 23);
-            this.btnStartClient.TabIndex = 5;
-            this.btnStartClient.Text = "Start Client";
-            this.btnStartClient.UseVisualStyleBackColor = true;
-            this.btnStartClient.Click += new System.EventHandler(this.btnStartClient_Click);
-            // 
             // btnUnsubscribeEvent
             // 
-            this.btnUnsubscribeEvent.Location = new System.Drawing.Point(279, 12);
+            this.btnUnsubscribeEvent.Location = new System.Drawing.Point(275, 8);
             this.btnUnsubscribeEvent.Name = "btnUnsubscribeEvent";
             this.btnUnsubscribeEvent.Size = new System.Drawing.Size(108, 23);
             this.btnUnsubscribeEvent.TabIndex = 8;
@@ -92,7 +70,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(393, 17);
+            this.label1.Location = new System.Drawing.Point(12, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(81, 13);
             this.label1.TabIndex = 9;
@@ -100,14 +78,14 @@
             // 
             // txtAccountName
             // 
-            this.txtAccountName.Location = new System.Drawing.Point(480, 13);
+            this.txtAccountName.Location = new System.Drawing.Point(99, 10);
             this.txtAccountName.Name = "txtAccountName";
-            this.txtAccountName.Size = new System.Drawing.Size(100, 20);
+            this.txtAccountName.Size = new System.Drawing.Size(65, 20);
             this.txtAccountName.TabIndex = 10;
             // 
             // btnCrash
             // 
-            this.btnCrash.Location = new System.Drawing.Point(586, 12);
+            this.btnCrash.Location = new System.Drawing.Point(389, 7);
             this.btnCrash.Name = "btnCrash";
             this.btnCrash.Size = new System.Drawing.Size(75, 23);
             this.btnCrash.TabIndex = 11;
@@ -125,8 +103,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnUnsubscribeEvent);
             this.Controls.Add(this.btnSubscribeEvent);
-            this.Controls.Add(this.btnStopClient);
-            this.Controls.Add(this.btnStartClient);
             this.Controls.Add(this.logControl1);
             this.Name = "FormClient";
             this.Text = "Client";
@@ -137,8 +113,6 @@
         }
 
         private System.Windows.Forms.Button btnCrash;
-        private System.Windows.Forms.Button btnStartClient;
-        private System.Windows.Forms.Button btnStopClient;
         private System.Windows.Forms.Button btnSubscribeEvent;
         private System.Windows.Forms.Button btnUnsubscribeEvent;
         private System.Windows.Forms.Label label1;

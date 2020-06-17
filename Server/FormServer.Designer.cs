@@ -35,12 +35,7 @@
             this.cbxAcctNames = new System.Windows.Forms.ComboBox();
             this.btnCrash = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // logControl1
-            // 
-            this.logControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.logControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.logControl1.HideTimestamps = false;
             this.logControl1.Location = new System.Drawing.Point(2, 52);
             this.logControl1.MaximumLogLengthChars = 1048576;
@@ -48,9 +43,6 @@
             this.logControl1.Size = new System.Drawing.Size(847, 470);
             this.logControl1.TabIndex = 1;
             this.logControl1.Title = "Log";
-            // 
-            // btnStartServer
-            // 
             this.btnStartServer.Location = new System.Drawing.Point(12, 12);
             this.btnStartServer.Name = "btnStartServer";
             this.btnStartServer.Size = new System.Drawing.Size(75, 23);
@@ -58,9 +50,6 @@
             this.btnStartServer.Text = "Start Server";
             this.btnStartServer.UseVisualStyleBackColor = true;
             this.btnStartServer.Click += new System.EventHandler(this.btnStartServer_Click);
-            // 
-            // btnStopServer
-            // 
             this.btnStopServer.Location = new System.Drawing.Point(93, 12);
             this.btnStopServer.Name = "btnStopServer";
             this.btnStopServer.Size = new System.Drawing.Size(75, 23);
@@ -68,37 +57,25 @@
             this.btnStopServer.Text = "Stop Server";
             this.btnStopServer.UseVisualStyleBackColor = true;
             this.btnStopServer.Click += new System.EventHandler(this.btnStopServer_Click);
-            // 
-            // btnSendEvent
-            // 
-            this.btnSendEvent.Location = new System.Drawing.Point(174, 12);
+            this.btnSendEvent.Location = new System.Drawing.Point(253, 14);
             this.btnSendEvent.Name = "btnSendEvent";
             this.btnSendEvent.Size = new System.Drawing.Size(75, 23);
             this.btnSendEvent.TabIndex = 4;
             this.btnSendEvent.Text = "Send Event";
             this.btnSendEvent.UseVisualStyleBackColor = true;
             this.btnSendEvent.Click += new System.EventHandler(this.btnSendEvent_Click);
-            // 
-            // cbxAcctNames
-            // 
             this.cbxAcctNames.FormattingEnabled = true;
-            this.cbxAcctNames.Location = new System.Drawing.Point(256, 13);
+            this.cbxAcctNames.Location = new System.Drawing.Point(174, 14);
             this.cbxAcctNames.Name = "cbxAcctNames";
-            this.cbxAcctNames.Size = new System.Drawing.Size(121, 21);
+            this.cbxAcctNames.Size = new System.Drawing.Size(73, 21);
             this.cbxAcctNames.TabIndex = 5;
-            // 
-            // btnCrash
-            // 
-            this.btnCrash.Location = new System.Drawing.Point(383, 11);
+            this.btnCrash.Location = new System.Drawing.Point(334, 14);
             this.btnCrash.Name = "btnCrash";
             this.btnCrash.Size = new System.Drawing.Size(75, 23);
             this.btnCrash.TabIndex = 12;
             this.btnCrash.Text = "Crash";
             this.btnCrash.UseVisualStyleBackColor = true;
             this.btnCrash.Click += new System.EventHandler(this.btnCrash_Click);
-            // 
-            // FormServer
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(847, 523);
@@ -113,7 +90,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormServer_FormClosing);
             this.Load += new System.EventHandler(this.FormServer_Load);
             this.ResumeLayout(false);
-
         }
 
         private System.Windows.Forms.Button btnCrash;

@@ -7,7 +7,7 @@ namespace Common
 
         public override string ToString()
         {
-            return $"{AccountName} from {Sender}";
+            return $"AccountName={AccountName} from {Sender}";
         }
     }
 }

@@ -33,11 +33,14 @@ namespace Server
                 {
                     var writer = new AccountSampleEventWriter(request.AccountName, responseStream, requester, _logControl);
                     _eventWriters.TryAdd(key, writer);
-                    OnSampleEvent(request.AccountName);
+                    OnAccountNameAdded(request.AccountName);
+                    _logControl.LogMessage($"Added subscription to SampleEvents for {AccountNameAdded}");
                 }
                 else
                 {
                     _eventWriters.TryRemove(key, out _);
+                    OnAccountNameRemoved(key.AccountName);
+                    _logControl.LogMessage($"Removed subscription to SampleEvents for {AccountNameAdded}");
                     return;
                 }
             }
@@ -52,15 +55,24 @@ namespace Server
                 if (value.IsDisposed)
                 {
                     _eventWriters.TryRemove(key, out _);
+                    OnAccountNameRemoved(key.AccountName);
                 }
             }
         }
 
         public event EventHandler<string> AccountNameAdded;
 
-        public void OnSampleEvent(string accountName)
+        public void OnAccountNameAdded(string accountName)
         {
             var tmp = AccountNameAdded;
+            tmp?.Invoke(this, accountName);
+        }
+        
+        public event EventHandler<string> AccountNameRemoved;
+
+        public void OnAccountNameRemoved(string accountName)
+        {
+            var tmp = AccountNameRemoved;
             tmp?.Invoke(this, accountName);
         }
     }

@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Common;
 using Grpc.Core;
@@ -17,10 +10,12 @@ namespace Server
     {
         private Grpc.Core.Server _server;
         private readonly FormSettings _formSettings = new FormSettings();
+        private readonly SynchronizationContextHelper _syncContextHelper;
 
         public FormServer()
         {
             InitializeComponent();
+            _syncContextHelper = new SynchronizationContextHelper();
         }
 
         private void btnStartServer_Click(object sender, EventArgs e)
@@ -34,16 +29,35 @@ namespace Server
                 },
                 Ports = {new ServerPort("localhost", Constants.ServerPort, ServerCredentials.Insecure)}
             };
-            logControl1.LogMessage("Starting server");
             _server.Start();
             logControl1.LogMessage("Started server");
 
             eventsServiceImpl.AccountNameAdded += EventsServiceImplOnAccountNameAdded;
+            eventsServiceImpl.AccountNameRemoved += EventsServiceImplOnAccountNameRemoved;
         }
 
-        private void  EventsServiceImplOnAccountNameAdded(object sender, string accountName)
+        private void EventsServiceImplOnAccountNameAdded(object sender, string accountName)
         {
-            cbxAcctNames.Items.Add(accountName);
+            _syncContextHelper.Send(_ =>
+            {
+                if (cbxAcctNames.Items.Contains(accountName))
+                {
+                    // duplicate subscription
+                    return;
+                }
+                cbxAcctNames.Items.Add(accountName);
+                cbxAcctNames.SelectedIndex = cbxAcctNames.Items.Count - 1;
+            });
+        }
+
+        private void EventsServiceImplOnAccountNameRemoved(object sender, string accountName)
+        {
+            _syncContextHelper.Send(_ =>
+            {
+                cbxAcctNames.Items.Remove(accountName);
+                cbxAcctNames.SelectedIndex = cbxAcctNames.Items.Count - 1;
+                cbxAcctNames.ResetText();
+            });
         }
 
         private async void btnStopServer_Click(object sender, EventArgs e)

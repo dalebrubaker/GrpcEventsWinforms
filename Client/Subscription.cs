@@ -8,7 +8,7 @@ using GrpcEvents;
 
 namespace Client
 {
-    public class Subscription : IDisposable
+    public class Subscription : IDisposable, IEquatable<Subscription>
     {
         private readonly string _clientName;
         private readonly LogControl _logControl;
@@ -16,6 +16,8 @@ namespace Client
         private AsyncDuplexStreamingCall<SubscribeRequest, SampleEventArgsMessage> _call;
 
         public string AccountName { get; }
+
+        public bool IsDisposed { get; private set; }
 
         public Subscription(string accountName, string clientName, LogControl logControl, Metadata headers)
         {
@@ -95,7 +97,7 @@ namespace Client
         {
             var request = new SubscribeRequest
             {
-                StartStop = true,
+                StartStop = false,
                 AccountName = AccountName
             };
             try
@@ -105,11 +107,9 @@ namespace Client
             }
             catch (RpcException ex)
             {
-                // TODO be graceful if server disappeared
                 _logControl.LogMessage(ex.Message);
                 _call = null;
-                MessageBox.Show(ex.Message);
-                throw;
+                Dispose();
             }
         }
 
@@ -117,11 +117,42 @@ namespace Client
         {
             _call?.Dispose();
             _call = null;
+            IsDisposed = true;
         }
 
         public override string ToString()
         {
             return AccountName;
+        }
+
+        public bool Equals(Subscription other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return AccountName == other.AccountName;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Subscription)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return AccountName != null ? AccountName.GetHashCode() : 0;
+        }
+
+        public static bool operator ==(Subscription left, Subscription right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Subscription left, Subscription right)
+        {
+            return !Equals(left, right);
         }
     }
 }

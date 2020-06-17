@@ -23,17 +23,9 @@ namespace Client
             Disposed += OnDisposed;
         }
 
-        private void  OnDisposed(object sender, EventArgs e)
+        private void OnDisposed(object sender, EventArgs e)
         {
             _semaphore?.Dispose();
-        }
-
-        private void btnStartClient_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void btnStopClient_Click(object sender, EventArgs e)
-        {
         }
 
         private void FormClient_Load(object sender, EventArgs e)
@@ -60,6 +52,7 @@ namespace Client
                 MessageBox.Show(this, "Enter an account name to which to subscribe events.");
                 return;
             }
+            RemoveDisposedSubscriptions();
             if (_subscriptions.Exists(x => x.AccountName == accountName))
             {
                 MessageBox.Show(this, "Duplicate account names are not allowed.");
@@ -70,6 +63,22 @@ namespace Client
             if (success)
             {
                 _subscriptions.Add(subscription);
+            }
+        }
+
+        /// <summary>
+        /// Subscriptions might have been disposed because a client disappeared
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        private void RemoveDisposedSubscriptions()
+        {
+            for (int i = 0; i < _subscriptions.Count; i++)
+            {
+                var subscription = _subscriptions[i];
+                if (subscription.IsDisposed)
+                {
+                    _subscriptions.RemoveAt(i--);
+                }
             }
         }
 
