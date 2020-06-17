@@ -7,23 +7,20 @@ namespace Server
 {
     public class AccountSampleEventWriter : IDisposable
     {
+        private readonly SampleEventKey _sampleEventKey;
         private readonly IServerStreamWriter<SampleEventArgsMessage> _responseStream;
-        private readonly string _requester;
         private readonly LogControl _logControl;
+        private readonly Action<SampleEventKey> _removeAction;
         private readonly Account _account;
-        
-        public string AccountName { get; }
-        
-        public bool IsDisposed { get; private set; }
 
-
-        public AccountSampleEventWriter(string accountName, IServerStreamWriter<SampleEventArgsMessage> responseStream, string requester, LogControl logControl)
+        public AccountSampleEventWriter(SampleEventKey sampleEventKey, IServerStreamWriter<SampleEventArgsMessage> responseStream,
+            LogControl logControl, Action<SampleEventKey> removeAction)
         {
+            _sampleEventKey = sampleEventKey;
             _responseStream = responseStream;
-            _requester = requester;
             _logControl = logControl;
-            AccountName = accountName;
-            _account = Accounts.RequireAccount(accountName);
+            _removeAction = removeAction;
+            _account = Accounts.RequireAccount(_sampleEventKey.AccountName);
             _account.SampleEvent += AccountOnSampleEvent;
         }
 
@@ -31,15 +28,15 @@ namespace Server
         {
             try
             {
-                _logControl.LogMessage($"Sending {e} to requester={_requester}");
+                _logControl.LogMessage($"Sending {e} to requester={_sampleEventKey}");
                 var args = e.ToSampleEventArgsMessage();
                 await _responseStream.WriteAsync(args);
             }
             catch (Exception ex)
             {
+                // Eo graceful recovery when client has disappeared
                 _logControl.LogMessage($"Exception: {ex.Message}");
-                
-                // Dispose instead of throwing for graceful recovery when client has disappeared
+                _removeAction(_sampleEventKey);
                 Dispose();
             }
         }
@@ -47,12 +44,11 @@ namespace Server
         public void Dispose()
         {
             _account.SampleEvent -= AccountOnSampleEvent;
-            IsDisposed = true;
         }
 
         public override string ToString()
         {
-            return AccountName;
+            return _sampleEventKey.AccountName;
         }
     }
 }

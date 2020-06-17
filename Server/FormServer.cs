@@ -13,13 +13,14 @@ namespace Server
         private readonly FormSettings _formSettings = new FormSettings();
         private readonly SynchronizationContextHelper _syncContextHelper;
         private readonly BindingList<string> _accountNames;
+        private bool _isShutdown;
 
         public FormServer()
         {
             InitializeComponent();
             _syncContextHelper = new SynchronizationContextHelper();
             _accountNames = new BindingList<string>();
-            cbxAcctNames.DataSource = _accountNames;
+            _isShutdown = true;
         }
 
         private void btnStartServer_Click(object sender, EventArgs e)
@@ -34,6 +35,7 @@ namespace Server
                 Ports = {new ServerPort("localhost", Constants.ServerPort, ServerCredentials.Insecure)}
             };
             _server.Start();
+            _isShutdown = false;
             logControl1.LogMessage("Started server");
 
             eventsServiceImpl.AccountNameAdded += EventsServiceImplOnAccountNameAdded;
@@ -65,9 +67,21 @@ namespace Server
 
         private async void btnStopServer_Click(object sender, EventArgs e)
         {
-            logControl1.LogMessage("Shutting down server");
-            await _server.ShutdownAsync();
-            logControl1.LogMessage("Shut down server");
+            if (_isShutdown)
+            {
+                return;
+            }
+            try
+            {
+                logControl1.LogMessage("Shutting down server");
+                await _server.ShutdownAsync();
+                logControl1.LogMessage("Shut down server");
+            }
+            catch (InvalidOperationException ex)
+            {
+                logControl1.LogMessage("Ignoring InvalidOperationException exception, possibly had already shutdown");
+            }
+            _isShutdown = true;
         }
 
         private void btnSendEvent_Click(object sender, EventArgs e)
@@ -87,6 +101,7 @@ namespace Server
             Text = $"Server@localhost:{Constants.ServerPort}";
             Location = _formSettings.FormLocation;
             Size = _formSettings.FormSize;
+            cbxAcctNames.DataSource = _accountNames;
         }
 
         private void FormServer_FormClosing(object sender, FormClosingEventArgs e)

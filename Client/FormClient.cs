@@ -52,13 +52,12 @@ namespace Client
                 MessageBox.Show(this, "Enter an account name to which to subscribe events.");
                 return;
             }
-            RemoveDisposedSubscriptions();
             if (_subscriptions.Exists(x => x.AccountName == accountName))
             {
                 MessageBox.Show(this, "Duplicate account names are not allowed.");
                 return;
             }
-            var subscription = new Subscription(accountName, Text, logControl1, _headers);
+            var subscription = new Subscription(accountName, Text, logControl1, _headers, RemoveSubscription);
             var success = await subscription.SubscribeAsync();
             if (success)
             {
@@ -66,18 +65,15 @@ namespace Client
             }
         }
 
-        /// <summary>
-        /// Subscriptions might have been disposed because a client disappeared
-        /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
-        private void RemoveDisposedSubscriptions()
+        private void RemoveSubscription(string accountName)
         {
             for (int i = 0; i < _subscriptions.Count; i++)
             {
                 var subscription = _subscriptions[i];
-                if (subscription.IsDisposed)
+                if (subscription.AccountName == accountName)
                 {
                     _subscriptions.RemoveAt(i--);
+                    return;
                 }
             }
         }

@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Common;
 using Grpc.Core;
 using GrpcEvents;
@@ -13,17 +12,17 @@ namespace Client
         private readonly string _clientName;
         private readonly LogControl _logControl;
         private readonly Metadata _headers;
+        private readonly Action<string> _removeSubscription;
         private AsyncDuplexStreamingCall<SubscribeRequest, SampleEventArgsMessage> _call;
 
         public string AccountName { get; }
 
-        public bool IsDisposed { get; private set; }
-
-        public Subscription(string accountName, string clientName, LogControl logControl, Metadata headers)
+        public Subscription(string accountName, string clientName, LogControl logControl, Metadata headers, Action<string> removeSubscription)
         {
             _clientName = clientName;
             _logControl = logControl;
             _headers = headers;
+            _removeSubscription = removeSubscription;
             AccountName = accountName;
         }
 
@@ -53,9 +52,9 @@ namespace Client
             }
             catch (RpcException ex)
             {
-                _logControl.LogMessage(ex.Message);
+                _logControl.LogMessage($"{ex.Message}\nRemember to use the StartServer button on FormServer");
                 _call = null;
-                MessageBox.Show($"{ex.Message}\nRemember to use the StartServer button on FormServer");
+                _removeSubscription(AccountName);
                 return false;
             }
             return true;
@@ -85,10 +84,9 @@ namespace Client
             }
             catch (RpcException ex)
             {
-                // TODO be graceful if server disappeared
                 _logControl.LogMessage(ex.Message);
                 _call = null;
-                MessageBox.Show(ex.Message);
+                _removeSubscription(AccountName);
                 throw;
             }
         }
@@ -110,6 +108,7 @@ namespace Client
                 _logControl.LogMessage(ex.Message);
                 _call = null;
                 Dispose();
+                _removeSubscription(AccountName);
             }
         }
 
@@ -117,7 +116,6 @@ namespace Client
         {
             _call?.Dispose();
             _call = null;
-            IsDisposed = true;
         }
 
         public override string ToString()

@@ -12,7 +12,7 @@ namespace Server
     {
         private readonly LogControl _logControl;
 
-        private readonly ConcurrentDictionary<AccountNamePeer, AccountSampleEventWriter> _eventWriters = new ConcurrentDictionary<AccountNamePeer, AccountSampleEventWriter>();
+        private readonly ConcurrentDictionary<SampleEventKey, AccountSampleEventWriter> _eventWriters = new ConcurrentDictionary<SampleEventKey, AccountSampleEventWriter>();
 
         public EventsServiceImpl(LogControl logControl)
         {
@@ -23,41 +23,31 @@ namespace Server
         {
             var requesterHeader = context.RequestHeaders.FirstOrDefault(x => x.Key == Constants.Requester.ToLower()); // Must be lower case. Ugh!
             var peer = context.Peer;
-            var requester = $"{requesterHeader}@{peer}";
+            var requester = requesterHeader == null ? $"Anonymous@{peer}" : $"{requesterHeader.Value}@{peer}";
             while (await requestStream.MoveNext())
             {
-                RemoveDisposedWriters();
                 var request = requestStream.Current;
-                var key = new AccountNamePeer(request.AccountName, peer);
+                var key = new SampleEventKey(request.AccountName, requester);
                 if (request.StartStop)
                 {
-                    var writer = new AccountSampleEventWriter(request.AccountName, responseStream, requester, _logControl);
+                    var writer = new AccountSampleEventWriter(key, responseStream, _logControl, RemoveWriter);
                     _eventWriters.TryAdd(key, writer);
                     OnAccountNameAdded(request.AccountName);
                     _logControl.LogMessage($"Added subscription to SampleEvents for {AccountNameAdded}");
                 }
                 else
                 {
-                    _eventWriters.TryRemove(key, out _);
-                    OnAccountNameRemoved(key.AccountName);
-                    _logControl.LogMessage($"Removed subscription to SampleEvents for {AccountNameAdded}");
+                    RemoveWriter(key);
                     return;
                 }
             }
         }
 
-        private void RemoveDisposedWriters()
+        private void RemoveWriter(SampleEventKey key)
         {
-            var keys = _eventWriters.Keys.ToList();
-            foreach (var key in keys)
-            {
-                var value = _eventWriters[key];
-                if (value.IsDisposed)
-                {
-                    _eventWriters.TryRemove(key, out _);
-                    OnAccountNameRemoved(key.AccountName);
-                }
-            }
+            _eventWriters.TryRemove(key, out _);
+            OnAccountNameRemoved(key.AccountName);
+            _logControl.LogMessage($"Removed subscription to SampleEvents for {AccountNameAdded}");
         }
 
         public event EventHandler<string> AccountNameAdded;
