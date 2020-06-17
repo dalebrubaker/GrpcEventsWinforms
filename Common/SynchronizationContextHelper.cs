@@ -51,10 +51,6 @@ namespace Common
                 // System.ComponentModel.InvalidAsynchronousStateException: An error occurred invoking the method.
                 // The destination thread no longer exists.
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
         }
 
         /// <summary>

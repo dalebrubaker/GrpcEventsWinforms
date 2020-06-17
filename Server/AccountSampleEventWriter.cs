@@ -8,13 +8,19 @@ namespace Server
     public class AccountSampleEventWriter : IDisposable
     {
         private readonly IServerStreamWriter<SampleEventArgsMessage> _responseStream;
+        private readonly string _requester;
         private readonly LogControl _logControl;
         private readonly Account _account;
+        
         public string AccountName { get; }
+        
+        public bool IsDisposed { get; private set; }
 
-        public AccountSampleEventWriter(string accountName, IServerStreamWriter<SampleEventArgsMessage> responseStream, LogControl logControl)
+
+        public AccountSampleEventWriter(string accountName, IServerStreamWriter<SampleEventArgsMessage> responseStream, string requester, LogControl logControl)
         {
             _responseStream = responseStream;
+            _requester = requester;
             _logControl = logControl;
             AccountName = accountName;
             _account = Accounts.RequireAccount(accountName);
@@ -25,20 +31,23 @@ namespace Server
         {
             try
             {
-                _logControl.LogMessage($"Sending {e}");
+                _logControl.LogMessage($"Sending {e} to requester={_requester}");
                 var args = e.ToSampleEventArgsMessage();
                 await _responseStream.WriteAsync(args);
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                Console.WriteLine(exception);
-                throw;
+                _logControl.LogMessage($"Exception: {ex.Message}");
+                
+                // Dispose instead of throwing for graceful recovery when client has disappeared
+                Dispose();
             }
         }
 
         public void Dispose()
         {
             _account.SampleEvent -= AccountOnSampleEvent;
+            IsDisposed = true;
         }
 
         public override string ToString()

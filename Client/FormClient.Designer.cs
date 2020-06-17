@@ -130,6 +130,7 @@
             this.Controls.Add(this.logControl1);
             this.Name = "FormClient";
             this.Text = "Client";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClient_FormClosing);
             this.Load += new System.EventHandler(this.FormClient_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Account.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="FormSettings.cs" />
     <Compile Include="LogControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Common;
 using Grpc.Core;
 using GrpcEvents;
@@ -11,18 +12,24 @@ namespace Client
     {
         private readonly string _clientName;
         private readonly LogControl _logControl;
+        private readonly Metadata _headers;
         private AsyncDuplexStreamingCall<SubscribeRequest, SampleEventArgsMessage> _call;
 
         public string AccountName { get; }
 
-        public Subscription(string accountName, string clientName, LogControl logControl)
+        public Subscription(string accountName, string clientName, LogControl logControl, Metadata headers)
         {
             _clientName = clientName;
             _logControl = logControl;
+            _headers = headers;
             AccountName = accountName;
         }
 
-        public async Task SubscribeAsync()
+        /// <summary>
+        /// Connect to server. Return <c>false</c> if subscribe fails
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> SubscribeAsync()
         {
             if (_call == null)
             {
@@ -34,6 +41,10 @@ namespace Client
                 AccountName = AccountName
             };
             _logControl.LogMessage($"{_clientName} is subscribing to event {request.AccountName}");
+            while (_call == null)
+            {
+                await Task.Delay(10).ConfigureAwait(false);
+            }
             try
             {
                 await _call.RequestStream.WriteAsync(request);
@@ -42,8 +53,10 @@ namespace Client
             {
                 _logControl.LogMessage(ex.Message);
                 _call = null;
-                throw;
+                MessageBox.Show($"{ex.Message}\nRemember to use the StartServer button on FormServer");
+                return false;
             }
+            return true;
         }
 
         private async Task StartReceivingEvents()
@@ -52,7 +65,7 @@ namespace Client
             {
                 var channel = new Channel("localhost:" + Constants.ServerPort, ChannelCredentials.Insecure);
                 var client = new EventsService.EventsServiceClient(channel);
-                using (_call = client.Subscribe())
+                using (_call = client.Subscribe(_headers))
                 {
                     _logControl.LogMessage($"{_clientName} is waiting for events...");
                     while (await _call.ResponseStream.MoveNext(CancellationToken.None))
@@ -70,8 +83,10 @@ namespace Client
             }
             catch (RpcException ex)
             {
+                // TODO be graceful if server disappeared
                 _logControl.LogMessage(ex.Message);
                 _call = null;
+                MessageBox.Show(ex.Message);
                 throw;
             }
         }
@@ -90,8 +105,10 @@ namespace Client
             }
             catch (RpcException ex)
             {
+                // TODO be graceful if server disappeared
                 _logControl.LogMessage(ex.Message);
                 _call = null;
+                MessageBox.Show(ex.Message);
                 throw;
             }
         }

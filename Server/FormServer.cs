@@ -16,6 +16,7 @@ namespace Server
     public partial class FormServer : Form
     {
         private Grpc.Core.Server _server;
+        private readonly FormSettings _formSettings = new FormSettings();
 
         public FormServer()
         {
@@ -62,6 +63,20 @@ namespace Server
         private void btnCrash_Click(object sender, EventArgs e)
         {
             Environment.Exit(1);
+        }
+
+        private void FormServer_Load(object sender, EventArgs e)
+        {
+            Text = $"Server@localhost:{Constants.ServerPort}";
+            Location = _formSettings.FormLocation;
+            Size = _formSettings.FormSize;
+        }
+
+        private void FormServer_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _formSettings.FormLocation = Location;
+            _formSettings.FormSize = Size;
+            _formSettings.Save();
         }
     }
 }

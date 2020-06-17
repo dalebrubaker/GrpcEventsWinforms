@@ -38,7 +38,9 @@
             // 
             // logControl1
             // 
-            this.logControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.logControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.logControl1.HideTimestamps = false;
             this.logControl1.Location = new System.Drawing.Point(2, 52);
             this.logControl1.MaximumLogLengthChars = 1048576;
@@ -108,7 +110,10 @@
             this.Controls.Add(this.logControl1);
             this.Name = "FormServer";
             this.Text = "Server";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormServer_FormClosing);
+            this.Load += new System.EventHandler(this.FormServer_Load);
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.Button btnCrash;

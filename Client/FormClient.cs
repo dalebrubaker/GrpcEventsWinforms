@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Common;
+using Grpc.Core;
 
 namespace Client
 {
@@ -12,7 +14,8 @@ namespace Client
         private int _clientNumber;
         private readonly List<Subscription> _subscriptions = new List<Subscription>();
         private Semaphore _semaphore;
-        
+        private Metadata _headers;
+        private readonly FormSettings _formSettings = new FormSettings();
 
         public FormClient()
         {
@@ -35,12 +38,18 @@ namespace Client
 
         private void FormClient_Load(object sender, EventArgs e)
         {
+            Location = _formSettings.FormLocation;
+            Size = _formSettings.FormSize;
             if (!Semaphore.TryOpenExisting(ClientGuid, out _semaphore))
             {
                 _semaphore = new Semaphore(0, 1000, ClientGuid);
             }
             _clientNumber = _semaphore.Release() + 1;
-            Text = "Client-" + _clientNumber;
+            Text = "Client" + _clientNumber;
+            _headers = new Metadata
+            {
+                {Constants.Requester, Text}
+            };
         }
 
         private async void btnSubscribeEvent_Click(object sender, EventArgs e)
@@ -56,9 +65,12 @@ namespace Client
                 MessageBox.Show(this, "Duplicate account names are not allowed.");
                 return;
             }
-            var subscription = new Subscription(accountName, Text, logControl1);
-            _subscriptions.Add(subscription);
-            await subscription.SubscribeAsync();
+            var subscription = new Subscription(accountName, Text, logControl1, _headers);
+            var success = await subscription.SubscribeAsync();
+            if (success)
+            {
+                _subscriptions.Add(subscription);
+            }
         }
 
         public async void btnUnsubscribeEvent_Click(object sender, EventArgs e)
@@ -82,6 +94,13 @@ namespace Client
         private void btnCrash_Click(object sender, EventArgs e)
         {
             Environment.Exit(1);
+        }
+
+        private void FormClient_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _formSettings.FormLocation = Location;
+            _formSettings.FormSize = Size;
+            _formSettings.Save();
         }
     }
 }
