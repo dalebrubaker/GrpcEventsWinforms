@@ -112,17 +112,6 @@ namespace Client
             }
         }
 
-        public void Dispose()
-        {
-            _call?.Dispose();
-            _call = null;
-        }
-
-        public override string ToString()
-        {
-            return AccountName;
-        }
-
         public bool Equals(Subscription other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -151,6 +140,17 @@ namespace Client
         public static bool operator !=(Subscription left, Subscription right)
         {
             return !Equals(left, right);
+        }
+
+        public void Dispose()
+        {
+            _call?.Dispose();
+            _call = null;
+        }
+
+        public override string ToString()
+        {
+            return AccountName;
         }
     }
 }
