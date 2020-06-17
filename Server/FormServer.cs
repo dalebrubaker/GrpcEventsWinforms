@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using Common;
 using Grpc.Core;
@@ -11,11 +12,14 @@ namespace Server
         private Grpc.Core.Server _server;
         private readonly FormSettings _formSettings = new FormSettings();
         private readonly SynchronizationContextHelper _syncContextHelper;
+        private readonly BindingList<string> _accountNames;
 
         public FormServer()
         {
             InitializeComponent();
             _syncContextHelper = new SynchronizationContextHelper();
+            _accountNames = new BindingList<string>();
+            cbxAcctNames.DataSource = _accountNames;
         }
 
         private void btnStartServer_Click(object sender, EventArgs e)
@@ -40,13 +44,13 @@ namespace Server
         {
             _syncContextHelper.Send(_ =>
             {
-                if (cbxAcctNames.Items.Contains(accountName))
+                if (_accountNames.Contains(accountName))
                 {
                     // duplicate subscription
                     return;
                 }
-                cbxAcctNames.Items.Add(accountName);
-                cbxAcctNames.SelectedIndex = cbxAcctNames.Items.Count - 1;
+                _accountNames.Add(accountName);
+                cbxAcctNames.SelectedIndex = _accountNames.Count - 1;
             });
         }
 
@@ -54,9 +58,8 @@ namespace Server
         {
             _syncContextHelper.Send(_ =>
             {
-                cbxAcctNames.Items.Remove(accountName);
-                cbxAcctNames.SelectedIndex = cbxAcctNames.Items.Count - 1;
-                cbxAcctNames.ResetText();
+                _accountNames.Remove(accountName);
+                cbxAcctNames.SelectedIndex = _accountNames.Count - 1;
             });
         }
 
